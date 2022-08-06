@@ -1,5 +1,5 @@
 #Data ingestion
-csv_file <- "~/Desktop/Eco.clustering/Data/raw_count_18S_ordered.csv"
+csv_file <- "~/Desktop/eDNA_Analysis/Data/raw_count_18S_ordered.csv"
 
 
 

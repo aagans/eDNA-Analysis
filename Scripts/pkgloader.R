@@ -6,7 +6,7 @@ for (pkg in pkgs) {
 
 bio.pkgs <- c("DirichletMultinomial", "miaViz", "microbiome")
 for (pkg in bio.pkgs) {
-  BiocManager::install()
+  BiocManager::install(pkg)
   library(pkg, character.only = TRUE)
 }
 

@@ -1,7 +1,7 @@
 # Importing and Cleaning Count Data ---------------------------------------
 
 #Import data
-ordered_raw_count <- read.csv("~/Desktop/Eco.clustering/Data/raw_count_18S_ordered.csv", header = TRUE, sep = ",")
+ordered_raw_count <- read.csv("~/Desktop/eDNA_Analysis/Data/raw_count_18S_ordered.csv", header = TRUE, sep = ",")
 
 #Preserve sample names
 sample.Names <- ordered_raw_count[,1]
@@ -33,7 +33,7 @@ linreg_Sums <- lm(sample_Sums_DF$sorted_sample_Sums~sample_Sums_DF$samples_Numbe
 R_Squared_Value <- summary(linreg_Sums)$r.squared
 
 #Now, analyzing the difference between samples using a Jensen-Shannon Divergence model, commented out lines are difference between OTUs
-ordered_count_matrix <- data.matrix(ordered_count)
+ordered_count_matrix <- data.matrix(ordered_count_log_fix)
 #JSDMatrixOTUs <- JSD(ordered_count_matrix, unit = "log10", est.prob = "empirical")
 #image(JSDMatrixOTUs, col = col.scale)
 
@@ -71,8 +71,9 @@ heatmap(as.matrix(abr_count_data_log10_fix), Rowv = NA, Colv = NA, col = col.sca
 
 image(as.matrix(abr_count_data_prop))
 image(as.matrix(abr_count_data_log10_fix))
+abr_count_matrix_norm <- as.matrix(abr_count_data_log10_fix)
 
-JSDMatrixSamplesAbridged <- JSD(t(data.matrix(abridged_count_data)), unit = "log2", est.prob = "empirical")
+JSDMatrixSamplesAbridged <- JSD(t(abr_count_matrix_norm), unit = "log2", est.prob = "empirical")
 image(JSDMatrixSamplesAbridged, col = col.scale, main = "Heatmap of Jensen-Shannon Divergence of Abridged Samples")
 
 avg.sil <- c()
@@ -80,9 +81,9 @@ avg.silAb <- c()
 
 # Calculating k-medoid clustering -----------------------------------------
  for (k in 2:20) {
-   pam.full <- pam(JSDMatrixSamplesTest, k, diss = TRUE)
+   pam.full <- pam(JSDMatrixSamples, k, diss = TRUE)
    clust_ordered <- order(pam.full$clustering)
-   image((JSDMatrixSamplesTest[clust_ordered,clust_ordered]),col=col.scale,axes=FALSE,xlab="",ylab="", main = c("Number of Clusters ", k))
+   image((JSDMatrixSamples[clust_ordered,clust_ordered]),col=col.scale,axes=FALSE,xlab="",ylab="", main = c("Number of Clusters ", k))
    for(r in 1:(k-1))
    {
      f <- sum((pam.full$clustering)<=r)/length((pam.full$clustering))
@@ -97,24 +98,24 @@ avg.silAb <- c()
    plot(sil, main = "Silhouette plot of K-Medoids Clustering based on Jansen-Shannon Divergence Values")
 }
 #6 clusters works best!!!!
-# 
-# for (k in 2:20) {
-#   pam.fullAb <- pam(JSDMatrixSamplesAbridged, k, diss = TRUE)
-#   clust_orderedAb <- order(pam.fullAb$clustering)
-#   image((JSDMatrixSamplesAbridged[clust_orderedAb,clust_orderedAb]),col=col.scale,axes=FALSE,xlab="",ylab="", main = c("Number of Clusters ", k))
-#   for(r in 1:(k-1))
-#   {
-#     f <- sum((pam.fullAb$clustering)<=r)/length((pam.fullAb$clustering))
-#     lines(x=c(f,f),y=c(0,1),col=rgb(0.1,0.1,0.9))
-#     lines(y=c(f,f),x=c(0,1),col=rgb(0.1,0.1,0.9))
-#   }
-#   text(x=0.2,y=0.7,label=k,cex=3,col=grey(0.9))
-#   box()
-#   silAb <- silhouette((pam.fullAb$clustering), dmatrix = JSDMatrixSamplesAbridged)
-#   avg.sil.widthAb <- mean(silAb[,"sil_width"])
-#   avg.silAb <- append(avg.silAb, avg.sil.widthAb)
-#   plot(silAb, main = "Silhouette plot of K-Medoids Clustering based on Jansen-Shannon Divergence Values of Abridged Data")
-# }
+
+for (k in 2:20) {
+  pam.fullAb <- pam(JSDMatrixSamplesAbridged, k, diss = TRUE)
+  clust_orderedAb <- order(pam.fullAb$clustering)
+  image((JSDMatrixSamplesAbridged[clust_orderedAb,clust_orderedAb]),col=col.scale,axes=FALSE,xlab="",ylab="", main = c("Number of Clusters ", k))
+  for(r in 1:(k-1))
+  {
+    f <- sum((pam.fullAb$clustering)<=r)/length((pam.fullAb$clustering))
+    lines(x=c(f,f),y=c(0,1),col=rgb(0.1,0.1,0.9))
+    lines(y=c(f,f),x=c(0,1),col=rgb(0.1,0.1,0.9))
+  }
+  text(x=0.2,y=0.7,label=k,cex=3,col=grey(0.9))
+  box()
+  silAb <- silhouette((pam.fullAb$clustering), dmatrix = JSDMatrixSamplesAbridged)
+  avg.sil.widthAb <- mean(silAb[,"sil_width"])
+  avg.silAb <- append(avg.silAb, avg.sil.widthAb)
+  plot(silAb, main = "Silhouette plot of K-Medoids Clustering based on Jansen-Shannon Divergence Values of Abridged Data")
+}
 # 6 also works for the abridged data set
 
 

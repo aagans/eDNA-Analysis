@@ -1,6 +1,4 @@
 
-
-
 index_pres_vec <- c()
 OTU_counts_total <- rowSums(ordered_count)
 OTU_counts_prop <-

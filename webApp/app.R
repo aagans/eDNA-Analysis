@@ -6,6 +6,9 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(h2("Criteria Selector"),
+                 selectInput("modelSelect", "What clustering model should be used?",
+                             choices = c("6 Cluster K-medoid", "2 Cluster Dirichlet Multinomial Mixture"),
+                             multiple = FALSE),
                  selectInput("critSelect", 
                              "What should the data be grouped by?", 
                              choices = c("Clustering", "Season", "Month", "Year", "Location"),

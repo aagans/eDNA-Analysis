@@ -2,7 +2,7 @@ install.load <- readline(prompt="Do you want to INSTALL or just LOAD packages? I
 
 
 if (install.load == 'INSTALL'){
-pkgs <- c("BiocManager", "shiny", "cluster", "ClusterR", "factoextra", "FactoMineR", "fpc", "ggplot2", "gplots", "knitr", "markdown", "NbClust", "parallel", "philentropy", "RColorBrewer","remotes", "rmarkdown", "vegan")
+pkgs <- c("BiocManager", "reshape2", "magrittr", "dplyr", "shiny", "cluster", "ClusterR", "factoextra", "FactoMineR", "fpc", "ggplot2", "gplots", "knitr", "markdown", "NbClust", "parallel", "philentropy", "RColorBrewer","remotes", "rmarkdown", "vegan")
 for (pkg in pkgs) {
   install.packages(pkg)
   library(pkg, character.only = TRUE)
@@ -23,7 +23,7 @@ for (pkg in bio.pkgs) {
 remotes::install_github("hallucigenia-sparsa/seqgroup")
 library('seqgroup')
 } else if (install.load == 'LOAD'){
-  pkgs <- c("BiocManager", "shiny", "cluster", "ClusterR", "factoextra", "FactoMineR", "fpc", "ggplot2", "gplots", "knitr", "markdown", "NbClust", "parallel", "philentropy", "RColorBrewer","remotes", "rmarkdown", "vegan")
+  pkgs <- c("BiocManager","reshape2", "magrittr", "dplyr", "shiny", "cluster", "ClusterR", "factoextra", "FactoMineR", "fpc", "ggplot2", "gplots", "knitr", "markdown", "NbClust", "parallel", "philentropy", "RColorBrewer","remotes", "rmarkdown", "vegan")
   for (pkg in pkgs) {
     library(pkg, character.only = TRUE)
   }

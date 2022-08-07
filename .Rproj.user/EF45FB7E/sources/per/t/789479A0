@@ -1,0 +1,28 @@
+{
+    "id": "789479A0",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1659899114768.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "id": "f10645bbffbd44638a6fcb0e87e3ca09",
+        "name": "bestAb",
+        "title": "bestAb",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 3142112813072,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1659899114768,
+    "read_only": false,
+    "read_only_alternatives": []
+}

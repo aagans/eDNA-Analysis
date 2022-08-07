@@ -153,11 +153,12 @@ plot(silAb, main = "Silhouette plot of K-Medoids Clustering based on Jansen-Shan
 plan(multisession)
 ordered_count_log_fix_matrix <- data.matrix(ordered_count_log_fix)
 rev_matrix <- t(ordered_count_log_fix_matrix)
+rev_matrix_count <- t(as.matrix(ordered_count_matrix))
 rev_matrix_abr <- t(abr_matrix)
 abr_log_matrix <- data.matrix(abr_count_data_log10_fix)
 rev_abr_log <- t(abr_log_matrix)
 
-fit <- future_lapply(1:9, dmn, count=rev_matrix, verbose = TRUE)
+fit <- future_lapply(1:9, dmn, count=rev_matrix_count, verbose = TRUE)
 lplc <- base::sapply(fit, DirichletMultinomial::laplace)
 aic  <- base::sapply(fit, DirichletMultinomial::AIC)
 bic  <- base::sapply(fit, DirichletMultinomial::BIC)
@@ -193,7 +194,7 @@ for (k in seq(ncol(fitted(best)))) {
 
 # Dirichlet Multinomial Mixture for Abridged Dataset -------------------------------------------
 
-fitAb <- future_lapply(1:20, dmn, count=t(abr_matrix), verbose = TRUE)
+fitAb <- future_lapply(1:9, dmn, count=t(abr_matrix), verbose = TRUE)
 lplcAb <- base::sapply(fitAb, DirichletMultinomial::laplace)
 aicAb  <- base::sapply(fitAb, DirichletMultinomial::AIC)
 bicAb  <- base::sapply(fitAb, DirichletMultinomial::BIC)
@@ -202,7 +203,7 @@ plot(lplcAb, type="b", xlab="Number of Dirichlet Components", ylab="Model Fit")
 lines(aicAb, type="b", lty = 2)
 lines(bicAb, type="b", lty = 3)
 
-bestAb <- fit[Ab[which.min(unlist(lplcAb))]]
+bestAb <- fitAb[[which.min(unlist(lplcAb))]]
 
 mixturewt(bestAb)
 

@@ -98,6 +98,21 @@ avg.silAb <- c()
    plot(sil, main = "Silhouette plot of K-Medoids Clustering based on Jansen-Shannon Divergence Values")
 }
 #6 clusters works best!!!!
+pam.full <- pam(JSDMatrixSamples, 6, diss = TRUE)
+clust_ordered <- order(pam.full$clustering)
+image((JSDMatrixSamples[clust_ordered,clust_ordered]),col=col.scale,axes=FALSE,xlab="",ylab="", main = c("Number of Clusters ", 6))
+for(r in 1:(5))
+{
+  f <- sum((pam.full$clustering)<=r)/length((pam.full$clustering))
+  lines(x=c(f,f),y=c(0,1),col=rgb(0.1,0.1,0.9))
+  lines(y=c(f,f),x=c(0,1),col=rgb(0.1,0.1,0.9))
+}
+text(x=0.2,y=0.7,label=k,cex=3,col=grey(0.9))
+box()
+sil <- silhouette((pam.full$clustering), dmatrix = JSDMatrixSamples)
+avg.sil.width <- mean(sil[,"sil_width"])
+avg.sil <- append(avg.sil, avg.sil.width)
+plot(sil, main = "Silhouette plot of K-Medoids Clustering based on Jansen-Shannon Divergence Values")
 
 for (k in 2:20) {
   pam.fullAb <- pam(JSDMatrixSamplesAbridged, k, diss = TRUE)
@@ -117,6 +132,21 @@ for (k in 2:20) {
   plot(silAb, main = "Silhouette plot of K-Medoids Clustering based on Jansen-Shannon Divergence Values of Abridged Data")
 }
 # 6 also works for the abridged data set
+pam.fullAb <- pam(JSDMatrixSamplesAbridged, 6, diss = TRUE)
+clust_orderedAb <- order(pam.fullAb$clustering)
+image((JSDMatrixSamplesAbridged[clust_orderedAb,clust_orderedAb]),col=col.scale,axes=FALSE,xlab="",ylab="", main = c("Number of Clusters ", 6))
+for(r in 1:(5))
+{
+  f <- sum((pam.fullAb$clustering)<=r)/length((pam.fullAb$clustering))
+  lines(x=c(f,f),y=c(0,1),col=rgb(0.1,0.1,0.9))
+  lines(y=c(f,f),x=c(0,1),col=rgb(0.1,0.1,0.9))
+}
+text(x=0.2,y=0.7,label=k,cex=3,col=grey(0.9))
+box()
+silAb <- silhouette((pam.fullAb$clustering), dmatrix = JSDMatrixSamplesAbridged)
+avg.sil.widthAb <- mean(silAb[,"sil_width"])
+avg.silAb <- append(avg.silAb, avg.sil.widthAb)
+plot(silAb, main = "Silhouette plot of K-Medoids Clustering based on Jansen-Shannon Divergence Values of Abridged Data")
 
 
 # Dirichlet Multinomial Mixture for Full Dataset -------------------------------------------

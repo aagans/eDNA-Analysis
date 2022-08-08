@@ -45,7 +45,13 @@ ui <- fluidPage(
                  ),
     
     mainPanel(h2("Visualizations"),
-              plotOutput("selected_plot"))
+              plotOutput("selected_plot"),
+              textOutput("maxCluster"),
+              textOutput("maxSeason"),
+              textOutput("maxMonth"),
+              textOutput("maxYear"),
+              textOutput("maxLocation")
+              )
   )
 )
 
@@ -55,7 +61,17 @@ server <- function(input, output) {
     if (input$critSelect == 'Clustering'){
       data_row <- meta_data[6,]
       eval_data_row <- data_row == input$clusterNumber
-      meta_data_clustered <- meta_data[,eval_data_row]
+      meta_data_clustered <<- meta_data[,eval_data_row]
+      
+      getmode <- function(v) {
+        uniqv <- unique(v)
+        uniqv[which.max(tabulate(match(v, uniqv)))]
+      }
+      modeCluster <<- as.integer(getmode(meta_data_clustered[6,]))
+      modeMonth <<- getmode(meta_data_clustered[2,])
+      modeSeason <<- getmode(meta_data_clustered[3,])
+      modeYear <<- as.integer(getmode(meta_data_clustered[4,]))
+      modeLocation <<- getmode(meta_data_clustered[5,])
       
       samp_months_labels <- c("Jun", "Jul", "Aug", "Sep", "Oct")
       samp_jun <- sum(meta_data_clustered[2,] == "Jun")
@@ -106,8 +122,18 @@ server <- function(input, output) {
     } else if (input$critSelect == 'Season') {
       data_row <- meta_data[3,]
       eval_data_row <- data_row == input$seasonSelect
-      meta_data_clustered <- meta_data[,eval_data_row]
+      meta_data_clustered <<- meta_data[,eval_data_row]
       
+      getmode <- function(v) {
+        uniqv <- unique(v)
+        uniqv[which.max(tabulate(match(v, uniqv)))]
+      }
+      modeCluster <<- as.integer(getmode(meta_data_clustered[6,]))
+      modeMonth <<- getmode(meta_data_clustered[2,])
+      modeSeason <<- getmode(meta_data_clustered[3,])
+      modeYear <<- as.integer(getmode(meta_data_clustered[4,]))
+      modeLocation <<- getmode(meta_data_clustered[5,])
+
       samp_clusters_labels <- c(1:6)
       samp_1 <- sum(meta_data_clustered[6,] == 1)
       samp_2 <- sum(meta_data_clustered[6,] == 2)
@@ -147,7 +173,6 @@ server <- function(input, output) {
       
       bar_data <- c(as.integer(matrix_cluster[,2]), as.integer(matrix_month[,2]), as.integer(matrix_year[,2]), as.integer(matrix_location[,2]))
       bar_labels <- c(as.integer(matrix_cluster[,1]), matrix_month[,1], as.integer(matrix_year[,1]), matrix_location[,1])
-      
       barplot(bar_data, 
               main = "Presence of Criteria in Selected Season", 
               names.arg = bar_labels,
@@ -167,7 +192,17 @@ server <- function(input, output) {
     } else if (input$critSelect == 'Month') {
       data_row <- meta_data[2,]
       eval_data_row <- data_row == input$monthSelect
-      meta_data_clustered <- meta_data[,eval_data_row]
+      meta_data_clustered <<- meta_data[,eval_data_row]
+      
+      getmode <- function(v) {
+        uniqv <- unique(v)
+        uniqv[which.max(tabulate(match(v, uniqv)))]
+      }
+      modeCluster <<- as.integer(getmode(meta_data_clustered[6,]))
+      modeMonth <<- getmode(meta_data_clustered[2,])
+      modeSeason <<- getmode(meta_data_clustered[3,])
+      modeYear <<- as.integer(getmode(meta_data_clustered[4,]))
+      modeLocation <<- getmode(meta_data_clustered[5,])
       
       samp_clusters_labels <- c(1:6)
       samp_1 <- sum(meta_data_clustered[6,] == 1)
@@ -228,8 +263,18 @@ server <- function(input, output) {
     } else if (input$critSelect == 'Year') {
       data_row <- meta_data[4,]
       eval_data_row <- data_row == input$yearNumber
-      meta_data_clustered <- meta_data[,eval_data_row]
+      meta_data_clustered <<- meta_data[,eval_data_row]
       
+      getmode <- function(v) {
+        uniqv <- unique(v)
+        uniqv[which.max(tabulate(match(v, uniqv)))]
+      }
+      modeCluster <<- as.integer(getmode(meta_data_clustered[6,]))
+      modeMonth <<- getmode(meta_data_clustered[2,])
+      modeSeason <<- getmode(meta_data_clustered[3,])
+      modeYear <<- as.integer(getmode(meta_data_clustered[4,]))
+      modeLocation <<- getmode(meta_data_clustered[5,])
+ 
       samp_clusters_labels <- c(1:6)
       samp_1 <- sum(meta_data_clustered[6,] == 1)
       samp_2 <- sum(meta_data_clustered[6,] == 2)
@@ -290,8 +335,18 @@ server <- function(input, output) {
     } else if (input$critSelect == 'Location') {
       data_row <- meta_data[5,]
       eval_data_row <- data_row == input$locationSelect
-      meta_data_clustered <- meta_data[,eval_data_row]
-      
+      meta_data_clustered <<- meta_data[,eval_data_row]
+    
+      getmode <- function(v) {
+        uniqv <- unique(v)
+        uniqv[which.max(tabulate(match(v, uniqv)))]
+      }
+      modeCluster <<- as.integer(getmode(meta_data_clustered[6,]))
+      modeMonth <<- getmode(meta_data_clustered[2,])
+      modeSeason <<- getmode(meta_data_clustered[3,])
+      modeYear <<- as.integer(getmode(meta_data_clustered[4,]))
+      modeLocation <<- getmode(meta_data_clustered[5,])
+
       samp_clusters_labels <- c(1:6)
       samp_1 <- sum(meta_data_clustered[6,] == 1)
       samp_2 <- sum(meta_data_clustered[6,] == 2)
@@ -345,6 +400,26 @@ server <- function(input, output) {
               
       )
     }
+  })
+  output$maxCluster <- renderText({
+    inputs <- c(input$critSelect, input$clusterNumber, input$monthSelect, input$seasonSelect, input$yearNumber, input$locationSelect)
+    paste("The most common cluster is", modeCluster)
+  })
+  output$maxMonth <- renderText({
+    inputs <- c(input$critSelect, input$clusterNumber, input$monthSelect, input$seasonSelect, input$yearNumber, input$locationSelect)
+    paste("The most common month is", modeMonth)
+  })
+  output$maxSeason <- renderText({
+    inputs <- c(input$critSelect, input$clusterNumber, input$monthSelect, input$seasonSelect, input$yearNumber, input$locationSelect)
+    paste("The most common season is", modeSeason)
+  })
+  output$maxYear <- renderText({
+    inputs <- c(input$critSelect, input$clusterNumber, input$monthSelect, input$seasonSelect, input$yearNumber, input$locationSelect)
+    paste("The most common year is", modeYear)
+  })
+  output$maxLocation <- renderText({
+    inputs <- c(input$critSelect, input$clusterNumber, input$monthSelect, input$seasonSelect, input$yearNumber, input$locationSelect)
+    paste("The most common location is", modeLocation)
   })
 }
 

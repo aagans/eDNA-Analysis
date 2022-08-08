@@ -66,3 +66,31 @@ barplot(bar_data,
         
 )
 
+
+
+
+
+
+
+
+
+
+  getmode <- function(v) {
+    uniqv <- unique(v)
+    uniqv[which.max(tabulate(match(v, uniqv)))]
+  }
+  modeCluster <- reactiveVal()
+  modeCluster(as.integer(getmode(meta_data_clustered[6,])))
+  
+  modeMonth <- reactiveVal()
+  modeMonth(getmode(meta_data_clustered[2,]))
+  
+  modeSeason <- reactiveVal()
+  modeSeason(getmode(meta_data_clustered[3,]))
+  
+  modeYear <- reactiveVal()
+  modeYear(getmode(meta_data_clustered[4,]))
+  
+  modeLocation <- reactiveVal()
+  modeLocation(getmode(meta_reactive$val_5))
+

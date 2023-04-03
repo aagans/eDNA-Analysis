@@ -1,7 +1,7 @@
 # Importing and Cleaning Count Data ---------------------------------------
 
 #Import data
-ordered_raw_count <- read.csv("~/Desktop/eDNA_Analysis/Data/raw_count_18S_ordered.csv", header = TRUE, sep = ",")
+ordered_raw_count <- read.csv("~/Documents/GitHub/eDNA-Analysis/Data/raw_count_18S_ordered.csv", header = TRUE, sep = ",")
 
 #Preserve sample names
 sample.Names <- ordered_raw_count[,1]

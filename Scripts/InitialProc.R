@@ -11,8 +11,7 @@ ordered_count <- ordered_raw_count[,-1]
 ordered_count_prop <- ordered_count/rowSums(ordered_count)
 ordered_count_log <- log10(ordered_count)
 ordered_count_log_fix=do.call(data.frame, lapply
-              (ordered_count_log, function(value) replace
-                (value, is.infinite(value), 0)))
+              (ordered_count_log, function(value) replace(value, is.infinite(value), 0)))
 ordered_count_log_fix <- data.matrix(ordered_count_log_fix)
 
 # Analyzing Sample Data for Irregularities --------------------------------
@@ -63,8 +62,7 @@ abr_matrix <- data.matrix(abridged_count_data)
 abr_count_data_prop <- abridged_count_data/rowSums(abridged_count_data)
 abr_count_data_log10 <- log10(abridged_count_data)
 abr_count_data_log10_fix=do.call(data.frame, lapply
-                                 (abr_count_data_log10, function(value) replace
-                                   (value, is.infinite(value), 0)))
+                                 (abr_count_data_log10, function(value) replace(value, is.infinite(value), 0)))
 
 heatmap(as.matrix(abr_count_data_prop), Rowv = NA, Colv = NA, col = col.scale, margins = c(10, 2), na.rm = TRUE, main = "Proportional", xlab = "OTUs", ylab = "Samples")
 heatmap(as.matrix(abr_count_data_log10_fix), Rowv = NA, Colv = NA, col = col.scale, margins = c(10, 2), na.rm = TRUE, main = "Log10", xlab = "OTUs", ylab = "Samples")
